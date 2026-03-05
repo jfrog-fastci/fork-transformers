@@ -2,8 +2,8 @@ FROM python:3.10-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ARG REF=main
 USER root
-RUN apt-get update && apt-get install -y time git
+RUN apt-get update && apt-get install -y --no-install-recommends time git && rm -rf /var/lib/apt/lists/*
 ENV UV_PYTHON=/usr/local/bin/python
-RUN pip install uv
+RUN pip install --no-cache-dir uv
 RUN uv pip install --no-cache-dir -U pip setuptools GitPython "git+https://github.com/huggingface/transformers.git@${REF}#egg=transformers[quality]" urllib3
-RUN apt-get install -y jq curl && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends jq curl && apt-get clean && rm -rf /var/lib/apt/lists/*
